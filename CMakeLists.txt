@@ -72,6 +72,14 @@ find_package(Freenect2  REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(${FREENECT2_INCLUDE_DIRS})
 include_directories(${INCLUDE})
+find_package(PCL 1.5 REQUIRED)
+
+include_directories(${PCL_INCLUDE_DIRS})
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})
+
+add_executable (pcd2vfh pcd2vfh.cpp)
+target_link_libraries (pcd2vfh ${PCL_LIBRARIES})
 
 add_executable(Kinect2Grabber      test.cpp)
 add_executable(MultiKinect2Grabber multi_test.cpp)
