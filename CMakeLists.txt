@@ -26,6 +26,8 @@ set(CMAKE_CXX_FLAGS   "${CMAKE_CXX_FLAGS} -march=native")
 set(CMAKE_BUILD_TYPE  Release)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/modules")
 set(INCLUDE           "${CMAKE_SOURCE_DIR}/include")
+set(OPENNI_INCLUDE_DIR "/home/fengping/Downloads/OpenNI2/Packaging/Final/OpenNI-Linux-x64-2.2/Include")
+set(OPENNI_LIB_DIR "/home/fengping/Downloads/OpenNI2/Packaging/Final/OpenNI-Linux-x64-2.2/Redist")
 
 option(WITH_OPENCL "adds opencl support for freenect2" OFF)
 if(${WITH_OPENCL})
@@ -68,6 +70,7 @@ endif()
 
 find_package(OpenCV     REQUIRED)
 find_package(Freenect2  REQUIRED)
+find_package(Threads)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(${FREENECT2_INCLUDE_DIRS})
@@ -81,11 +84,14 @@ add_definitions(${PCL_DEFINITIONS})
 add_executable (pcd2vfh pcd2vfh.cpp)
 target_link_libraries (pcd2vfh ${PCL_LIBRARIES})
 
+add_executable (main_ground_based_people_detection main_ground_based_people_detection.cpp)
+target_link_libraries (main_ground_based_people_detection ${PCL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+
 add_executable(Kinect2Grabber      test.cpp)
-add_executable(MultiKinect2Grabber multi_test.cpp)
+#add_executable(MultiKinect2Grabber multi_test.cpp)
 
 target_link_libraries(Kinect2Grabber      ${OpenCV_LIBS} ${FREENECT2_LIBRARY} ${PCL_LIBRARIES} ${BOOST_LIBS})
-target_link_libraries(MultiKinect2Grabber ${OpenCV_LIBS} ${FREENECT2_LIBRARY} ${PCL_LIBRARIES} ${BOOST_LIBS})
+#target_link_libraries(MultiKinect2Grabber ${OpenCV_LIBS} ${FREENECT2_LIBRARY} ${PCL_LIBRARIES} ${BOOST_LIBS})
 
 if(${WITH_ROS})
 	add_executable(RosKinect2Grabber test_ros.cpp)
